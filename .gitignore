@@ -1,0 +1,140 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+cenv/
+venv/
+ENV/
+env/
+.venv
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Model files (large binary files)
+models/
+Data/
+Data_Sample
+*.pkl
+*.pth
+*.h5
+*.ckpt
+*.safetensors
+
+# Data files (large dataset)
+Data/generated_audio/
+Data/labels_normalised/
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.json
+
+# Keep data structure but ignore content
+!Data/generated_audio/.gitkeep
+!Data/labels_normalised/.gitkeep
+
+# Keep CSV indexes (small files, useful for structure)
+!Data/indexes/*.csv
+
+# Logs
+*.log
+logs/
+wandb/
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Cache
+.cache/
+*.cache
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+simple_chatbot.py
+tone_chatbot.py
+
+# Documentation builds
+docs/_build/
+site/
+
+# Hugging Face cache
+.cache/huggingface/
+transformers_cache/
+
+# Large model downloads
+laion_clap/
+clap_checkpoints/
+
+# Training outputs
+outputs/
+checkpoints/
+runs/
+experiments/
+
+# Gradio cache
+gradio_cached_examples/
+flagged/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Compressed archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Large text files
+*.txt.gz
+
+# IDE specific
+*.sublime-project
+*.sublime-workspace
