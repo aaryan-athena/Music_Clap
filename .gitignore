@@ -51,7 +51,6 @@ test_results
 test_results_old
 nam_test_results
 nam_test_results_old
-test_model.py
 TEST_EVALUATION_README.md
 NAM_TESTING_ANALYSIS.md
 *.pkl
@@ -108,7 +107,6 @@ htmlcov/
 .tox/
 simple_chatbot.py
 tone_chatbot.py
-test_nam_real_audio.py
 
 # Documentation builds
 docs/_build/
