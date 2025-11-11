@@ -169,24 +169,63 @@ class MusicToneClassifier:
         }
     
     def match_text_to_tone(self, text_description):
-        """Match text description to best tone type and provide knob settings"""
-        # Extract text embedding
+        """
+        Match text description directly to knob parameters using neural network.
+        This allows for infinite variations based on text input, not just 4 predefined tones.
+        """
+        # Extract text embedding from CLAP
         text_embed = self.extract_text_features([text_description])[0]
+        text_embed = text_embed.reshape(1, -1)
         
-        # Calculate similarity with each tone type
+        # Predict knob settings directly using neural network
+        knob_settings = {}
+        if self.knob_regressor_net is not None:
+            # Normalize input features (same as audio)
+            text_embed_scaled = self.knob_scaler.transform(text_embed)
+            text_tensor = torch.FloatTensor(text_embed_scaled).to(self.device)
+            
+            self.knob_regressor_net.eval()
+            with torch.no_grad():
+                knob_predictions = self.knob_regressor_net(text_tensor).cpu().numpy()[0]
+            
+            for i, param in enumerate(self.knob_params):
+                knob_settings[param] = float(knob_predictions[i])
+        else:
+            # Fallback: use tone classification if neural network not available
+            return self._match_text_to_tone_fallback(text_description)
+        
+        # Also calculate tone type for reference (optional)
         similarities = {}
         for tone_type, tone_embed in self.tone_embeddings.items():
-            # Cosine similarity
+            similarity = np.dot(text_embed.flatten(), tone_embed) / (
+                np.linalg.norm(text_embed) * np.linalg.norm(tone_embed)
+            )
+            similarities[tone_type] = similarity
+        
+        best_tone = max(similarities, key=similarities.get)
+        confidence = similarities[best_tone]
+        
+        return {
+            'tone_type': best_tone,  # For reference only
+            'confidence': confidence,
+            'knob_settings': knob_settings,
+            'all_similarities': similarities
+        }
+    
+    def _match_text_to_tone_fallback(self, text_description):
+        """Fallback method using predefined tone defaults"""
+        text_embed = self.extract_text_features([text_description])[0]
+        
+        similarities = {}
+        for tone_type, tone_embed in self.tone_embeddings.items():
             similarity = np.dot(text_embed, tone_embed) / (
                 np.linalg.norm(text_embed) * np.linalg.norm(tone_embed)
             )
             similarities[tone_type] = similarity
         
-        # Get best matching tone
         best_tone = max(similarities, key=similarities.get)
         confidence = similarities[best_tone]
         
-        # Use default knob settings for this tone type
         knob_settings = self.tone_defaults.get(best_tone, self.tone_defaults['Clean'])
         
         return {
